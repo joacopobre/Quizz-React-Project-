@@ -5,19 +5,30 @@
     
 }
 body{
-    height: 100%;
-    overscroll-behavior-block: none;
+    height: 100vh;
+    margin: 0;
     background-color: #F5F7FB;
     font-family: "Karla", sans-serif;
+    display: flex;
+    justify-content: center; 
+    align-items: center;  
+    background: linear-gradient(to right, #f5f7fb, #ebf0ff);
+    
 }
 main {
+  max-width: 90vw;
   width: 550px;
-  height: 550px;
+  min-height: 550px;
   background-color: #F5F7FB;
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin: 0 auto;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-radius: 10px;
 }
+
 .start-screen {
   justify-content: center;
   align-items: center;
@@ -38,7 +49,7 @@ header > h1{
 }
 header > p{
     max-width: 300px;
-    font-size: 1.em;
+    font-size: 1em;
     font-weight: 400;
     line-height: 100%;
     margin: 15px 0 ;
@@ -75,15 +86,17 @@ header > button:active{
     display: flex;
     flex-direction: column;
     text-align: start;
-    border-bottom: 1px #DBDEF0 solid;
-    width: 400px;
-    
+    border-bottom: 1px #DBDEF0 solid; 
+    width: 100%; 
+    max-width: 480px;
+    margin: 0 auto 20px;
 }
 
 .question-block > h3{
     color: #293264;
     font-weight: 700;
-    font-size:1em ;
+    font-size: 1.1em;
+    line-height: 1.4;
     margin: 10px 0 5px 3px;
     
 }
@@ -94,9 +107,7 @@ header > button:active{
 
 .answer-button {
   display: flex;
-  font-size: 0.625em;
   line-height: 1.2; 
-  padding: 3px 10px;
   margin: 6px 4px;
   border: 1px solid #4D5B9E;
   color: #293264;
@@ -104,8 +115,14 @@ header > button:active{
   cursor: pointer;
   transition: background-color 0.3s, border-color 0.3s;
   user-select: none;
-  vertical-align: middle; /* align text better */
+  vertical-align: middle;
+  font-size: 0.75em; /* was 0.625em */
+  padding: 6px 14px;
   
+}
+.answer-button:focus-within {
+  outline: 2px dashed #4D5B9E;
+  outline-offset: 2px;
 }
 .answers-block {
     display: flex;
@@ -141,6 +158,10 @@ header > button:active{
 .answer-button.answers-shown{
     opacity: 0.5;
     cursor: not-allowed;
+}
+.average-btn,
+.answer-button {
+  transition: all 0.2s ease-in-out;
 }
 
 .average-btn{

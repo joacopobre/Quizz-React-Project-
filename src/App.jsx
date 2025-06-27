@@ -1,117 +1,116 @@
+// QuizzApp.jsx
 import React from "react"
-import LandingPage from "./LanndingPage"
+import LandingPage from "./LandingPage" 
 import Questions from "./Questions"
 import clsx from "clsx"
 
+export default function QuizApp() {
+  const [quizStarted, setQuizStarted] = React.useState(false)
+  const [questions, setQuestions] = React.useState([])
+  const [userAnswers, setUserAnswers] = React.useState({})
+  const [showResults, setShowResults] = React.useState(false)
+  const [loading, setLoading] = React.useState(true)
 
-export default function QuizzApp(){
+  // Fetch quiz data from API
+  const fetchData = React.useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
+      if (!res.ok) throw new Error("Failed to fetch data")
 
-  const[quizzTime, setQuizz] = React.useState(false)
-  const[quizzQuestions, setQuestions]= React.useState([])
-  const[userAnswers,setUserAnswers]=React.useState({})
-  const[showResults,setShowResults] = React.useState(false)
-  
-  // fetch data from API
-  const fetchData = async () =>{
-      try{
-        const res = await fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
-        if (!res.ok) throw new Error("Failed to fetch data")
-          const data = await res.json()
-          const formatedQuestions = data.results.map(q=>({
-            ...q,
-            allAnswers: [...q.incorrect_answers,q.correct_answer]
-              .sort(()=>Math.random()-0.5)
-          }))
-          setQuestions(formatedQuestions)
-      }
-      catch(err){
-        console.log(err)
-      }
-      
+      const data = await res.json()
+      const formattedQuestions = data.results.map(q => ({
+        ...q,
+        allAnswers: [...q.incorrect_answers, q.correct_answer].sort(() => Math.random() - 0.5)
+      }))
+
+      setQuestions(formattedQuestions)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
     }
+  }, [])
 
-  // call the fetch data function 
-  React.useEffect(()=>{
+  // Fetch on initial render
+  React.useEffect(() => {
     fetchData()
-  },[])
-    
-  
+  }, [fetchData])
 
-  const handleClickStart=()=>{
-    setQuizz(true)
+  const startQuiz = () => {
+    setQuizStarted(true)
   }
 
-  const handleAnswerSelect =(questionIndex, answer) =>{
-    setUserAnswers(prevAnswers =>({
-        ...prevAnswers,
-        [questionIndex]:answer
+  const selectAnswer = (questionIndex, answer) => {
+    setUserAnswers(prev => ({
+      ...prev,
+      [questionIndex]: answer
     }))
   }
 
-  const questionElements =()=>{
-    
-    return quizzQuestions.map((question,index)=>(
-      <Questions 
-      index={index}
-      key={index}
-      question={question.question} 
-      correct_answer={question.correct_answer} 
-      incorrect_answers={question.incorrect_answers}
-      onSelect={handleAnswerSelect}
-      selected={userAnswers[index]}
-      allAnswers={question.allAnswers}
-      showResults={showResults}
-      />
-    ))
-  }
-  
-  const checkAnswersClass = clsx(
-    "average-btn",{
-      "not-available":Object.keys(userAnswers).length != 5 
-    })
-  const handleCheckBtn = ()=>{
+  const submitAnswers = () => {
     setShowResults(true)
   }
+
   const resetGame = () => {
     fetchData()
     setShowResults(false)
     setUserAnswers({})
   }
 
-  const checkAnswersBtn = () =>{
-    return (
-      <button className={checkAnswersClass} onClick={handleCheckBtn}>Check answers</button>
-    )
-  }
-  const playAgainText = () =>{
-    const rightAnswers = quizzQuestions.reduce((acc, question, index) => {
-    return userAnswers[index] === question.correct_answer ? acc + 1 : acc;
-  }, 0);
+  const resultsFooter = () => {
+    const score = questions.reduce((acc, question, index) => {
+      return userAnswers[index] === question.correct_answer ? acc + 1 : acc
+    }, 0)
 
-    const textToDisplay = `You scored ${rightAnswers}/5 correct answers`
-    return(
+    return (
       <footer className="play-again">
-        <h2>{textToDisplay}</h2>
+        <h2>You scored {score}/5 correct answers</h2>
         <button className="average-btn" onClick={resetGame}>Play again</button>
       </footer>
-        
-      
     )
   }
 
-  return( 
-    <main className={quizzTime?"questions-screen":"start-screen"}>
-        {quizzTime?
+  const checkAnswersBtn = (
+    <button
+      className={clsx("average-btn", {
+        "not-available": Object.keys(userAnswers).length !== 5
+      })}
+      onClick={submitAnswers}
+      disabled={Object.keys(userAnswers).length !== 5}
+    >
+      Check answers
+    </button>
+  )
+
+  const questionElements = questions.map((question, index) => (
+    <Questions
+      key={index}
+      index={index}
+      question={question.question}
+      correct_answer={question.correct_answer}
+      incorrect_answers={question.incorrect_answers}
+      onSelect={selectAnswer}
+      selected={userAnswers[index]}
+      allAnswers={question.allAnswers}
+      showResults={showResults}
+    />
+  ))
+
+  if (loading) {
+    return <main className="loading-screen">Loading...</main>
+  }
+
+  return (
+    <main className={quizStarted ? "questions-screen" : "start-screen"}>
+      {quizStarted ? (
         <div className="questions-main">
-          {questionElements()}
-          {showResults?playAgainText():checkAnswersBtn()}
-          
+          {questionElements}
+          {showResults ? resultsFooter() : checkAnswersBtn}
         </div>
-        
-        
-        :
-        <LandingPage handleClick={handleClickStart}/>
-        }
+      ) : (
+        <LandingPage handleClick={startQuiz} />
+      )}
     </main>
   )
 }
