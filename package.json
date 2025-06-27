@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "csl": "^0.0.0-reserved",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

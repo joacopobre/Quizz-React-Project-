@@ -1,68 +1,194 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
 }
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+body{
+    height: 100%;
+    overscroll-behavior-block: none;
+    background-color: #F5F7FB;
+    font-family: "Karla", sans-serif;
 }
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
+main {
+  width: 550px;
+  height: 550px;
+  background-color: #F5F7FB;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  text-align: center;
+}
+.start-screen {
+  justify-content: center;
+  align-items: center;
+}
+.questions-screen {
+  justify-content: flex-start;
+  align-items: center;
+  
+  
+}
+header{
+    color: #293264;
+}
+header > h1{
+    font-size: 1.875em;
+    font-weight: 700;
+    line-height: 100%;
+}
+header > p{
+    max-width: 300px;
+    font-size: 1.em;
+    font-weight: 400;
+    line-height: 100%;
+    margin: 15px 0 ;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+header > button{
+    font-weight: 500;
+    font-size: 1em;
+    line-height: 100%;
+    color: #F5F7FB;
+    width:200px;
+    height: 52px;
+    border: none;
+    border-radius: 15px;
+    background-color: #4D5B9E;
+    cursor: pointer;
+}
+header > button:hover{
+    background-color: #42529d;
+}
+header > button:active{
+    background-color: #616c9f;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/** questions CSS **/
+.questions-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+.question-block{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    border-bottom: 1px #DBDEF0 solid;
+    width: 400px;
+    
+}
+
+.question-block > h3{
+    color: #293264;
+    font-weight: 700;
+    font-size:1em ;
+    margin: 10px 0 5px 3px;
+    
+}
+/* Hide the radio input */
+.hidden-radio {
+  display: none;
+}
+
+.answer-button {
+  display: flex;
+  font-size: 0.625em;
+  line-height: 1.2; 
+  padding: 3px 10px;
+  margin: 6px 4px;
+  border: 1px solid #4D5B9E;
+  color: #293264;
+  border-radius: 7px;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.3s, border-color 0.3s;
+  user-select: none;
+  vertical-align: middle; /* align text better */
+  
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.answers-block {
+    display: flex;
+    margin-bottom: 5px;
+    
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+
+/* On hover (optional) */
+.answer-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* When selected before showing results */
+.answer-button.selected {
+  background-color: #D6DBF5;
+  border: 1px solid #F5F7FB;
+}
+
+/* After clicking "Check Answers" */
+.answer-button.correct {
+  background-color: #83d195;
+  border-color: #F5F7FB;
+  cursor: not-allowed;
+}
+
+.answer-button.incorrect {
+  background-color: #f8d7da;
+  border-color: #F5F7FB;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.answer-button.answers-shown{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.average-btn{
+    align-self: center;
+    margin-top: 20px;
+    border: 1px solid #F5F7FB;
+    font-weight: 600;
+    font-size: 0.625em;
+    color: #F5F7FB;
+    background-color: #4D5B9E;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+.average-btn:hover{
+    background-color: #7384cf;
+    border: 1px solid #42529d;
+}
+
+.average-btn:active{
+    background-color: #4D5B9E;
+    border: 1px solid #F5F7FB;
+}
+.not-available{
+    cursor: not-allowed;
+    opacity: 0.5;
+    
+}
+.not-available:hover{
+    background-color: #4D5B9E;
+    opacity: 0.5;
+    border: 1px solid #F5F7FB;
+    
+}
+footer.play-again{
+    display: flex;
+    align-items: center;
+    align-self: center;
+    margin-top: 10px;
+}
+footer.play-again > h2 {
+    color: #293264;
+    font-weight: 700;
+    font-size: 0.75em;
+    
+}
+footer.play-again > button{
+    margin: 0 0 0 10px;
+
 }
